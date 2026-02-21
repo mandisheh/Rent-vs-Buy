@@ -355,8 +355,9 @@ class RentVsBuyAnalysis:
             yearly_home_equity.append(round(max(0, equity_after_sales), 2))
             
             # Calculate investment with available budget for BUY SCENARIO
-            investment_value_buy = self.down_payment
-            total_contributions_buy = self.down_payment
+            # Note: down payment goes to house, so investment starts at 0
+            investment_value_buy = 0
+            total_contributions_buy = 0
             
             for y in range(year):
                 # Income increases annually with inflation
