@@ -115,16 +115,8 @@ class RentVsBuyAnalysis:
             # Income increases annually with inflation
             current_monthly_income = monthly_income * ((1 + annual_inflation_rate / 100) ** year)
             
-            # Calculate average monthly buy cost
-            monthly_property_tax = current_home_value * (annual_property_tax_rate / 100) / 12
-            monthly_maintenance = current_home_value * (annual_maintenance_rate / 100) / 12
-            monthly_insurance = current_home_value * (annual_insurance_rate / 100) / 12
-            monthly_hoa = current_home_value * (annual_hoa / 100) / 12
-            avg_monthly_buy_cost = monthly_mortgage + monthly_property_tax + monthly_maintenance + monthly_insurance + monthly_hoa
-            
-            # Available budget for investment
-            available_budget = max(0, current_monthly_income - avg_monthly_buy_cost)
-            monthly_investment_amount = available_budget * (monthly_investment_percentage / 100)
+            # Monthly investment = percentage of gross income (not dependent on costs)
+            monthly_investment_amount = current_monthly_income * (monthly_investment_percentage / 100)
             
             for month in range(12):
                 # Grow existing investment
@@ -300,23 +292,14 @@ class RentVsBuyAnalysis:
             current_monthly_income = monthly_income * ((1 + annual_inflation_rate / 100) ** (year - 1))
             monthly_income_values.append(round(current_monthly_income, 2))
             
-            # Calculate average monthly cost for buy scenario
-            monthly_property_tax = current_home_value * (annual_property_tax_rate / 100) / 12
-            monthly_maintenance = current_home_value * (annual_maintenance_rate / 100) / 12
-            monthly_insurance = current_home_value * (annual_insurance_rate / 100) / 12
-            monthly_hoa = current_home_value * (annual_hoa / 100) / 12
-            avg_monthly_buy_cost = monthly_mortgage + monthly_property_tax + monthly_maintenance + monthly_insurance + monthly_hoa
+            # Monthly investment = percentage of gross income (not dependent on costs)
+            monthly_investment_amount = current_monthly_income * (monthly_investment_percentage / 100)
             
-            # Available budget for buy scenario
-            available_budget_buy = max(0, current_monthly_income - avg_monthly_buy_cost)
-            monthly_investment_buy = available_budget_buy * (monthly_investment_percentage / 100)
-            buy_monthly_investments.append(round(monthly_investment_buy, 2))
+            # Buy scenario: same investment as planned
+            buy_monthly_investments.append(round(monthly_investment_amount, 2))
             
-            # Available budget for rent scenario
-            current_monthly_rent = monthly_rent * ((1 + annual_rent_increase_rate / 100) ** (year - 1))
-            available_budget_rent = max(0, current_monthly_income - current_monthly_rent)
-            monthly_investment_rent = available_budget_rent * (monthly_investment_percentage / 100)
-            rent_monthly_investments.append(round(monthly_investment_rent, 2))
+            # Rent scenario: same investment as planned
+            rent_monthly_investments.append(round(monthly_investment_amount, 2))
             
             # Update home value for next year
             current_home_value *= (1 + annual_appreciation_rate / 100)
