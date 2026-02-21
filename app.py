@@ -151,6 +151,7 @@ def analyze():
                 'yearly_growth': {
                     'years': results['yearly_growth']['years'],
                     'home_equity_after_sales': results['yearly_growth']['home_equity_after_sales'],
+                    'investment_growth': results['yearly_growth']['investment_growth'],
                     'investment_growth_buy': results['yearly_growth']['investment_growth_buy'],
                     'investment_growth_rent': results['yearly_growth']['investment_growth_rent'],
                     'investment_gains_buy': results['yearly_growth']['investment_gains_buy'],

@@ -406,6 +406,7 @@ class RentVsBuyAnalysis:
         return {
             'years': list(range(1, years + 1)),
             'home_equity_after_sales': yearly_home_equity,
+            'investment_growth': yearly_investment_value_rent,  # For backwards compatibility
             'investment_growth_buy': yearly_investment_value_buy,
             'investment_growth_rent': yearly_investment_value_rent,
             'investment_gains_buy': yearly_investment_gains_buy,
