@@ -155,7 +155,8 @@ def analyze():
                     'investment_growth_buy': results['yearly_growth']['investment_growth_buy'],
                     'investment_growth_rent': results['yearly_growth']['investment_growth_rent'],
                     'investment_gains_buy': results['yearly_growth']['investment_gains_buy'],
-                    'investment_gains_rent': results['yearly_growth']['investment_gains_rent']
+                    'investment_gains_rent': results['yearly_growth']['investment_gains_rent'],
+                    'buy_wealth_gains': results['yearly_growth']['buy_wealth_gains']
                 }
             }
         })

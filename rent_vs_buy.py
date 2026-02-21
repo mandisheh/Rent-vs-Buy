@@ -413,6 +413,12 @@ class RentVsBuyAnalysis:
             gains_rent = max(0, investment_value_rent - total_contributions_rent)
             yearly_investment_gains_rent.append(round(gains_rent, 2))
         
+        # Calculate combined wealth for buy scenario (home equity + investment gains)
+        yearly_buy_wealth_gains = [
+            round(yearly_home_equity[i] + yearly_investment_gains_buy[i], 2) 
+            for i in range(len(yearly_home_equity))
+        ]
+        
         return {
             'years': list(range(1, years + 1)),
             'home_equity_after_sales': yearly_home_equity,
@@ -420,7 +426,8 @@ class RentVsBuyAnalysis:
             'investment_growth_buy': yearly_investment_value_buy,
             'investment_growth_rent': yearly_investment_value_rent,
             'investment_gains_buy': yearly_investment_gains_buy,
-            'investment_gains_rent': yearly_investment_gains_rent
+            'investment_gains_rent': yearly_investment_gains_rent,
+            'buy_wealth_gains': yearly_buy_wealth_gains
         }
     
     def compare_scenarios(self, years, monthly_rent, annual_market_return=7.0, 
