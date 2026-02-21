@@ -328,6 +328,8 @@ class RentVsBuyAnalysis:
         yearly_home_equity = []
         yearly_investment_value_buy = []
         yearly_investment_value_rent = []
+        yearly_investment_gains_buy = []
+        yearly_investment_gains_rent = []
         monthly_return = annual_market_return / 100 / 12
         
         # Calculate monthly costs for both scenarios
@@ -344,6 +346,7 @@ class RentVsBuyAnalysis:
             
             # Calculate investment with available budget for BUY SCENARIO
             investment_value_buy = self.down_payment
+            total_contributions_buy = self.down_payment
             
             for y in range(year):
                 # Income increases annually with inflation
@@ -366,11 +369,16 @@ class RentVsBuyAnalysis:
                     investment_value_buy *= (1 + monthly_return)
                     # Add monthly investment
                     investment_value_buy += monthly_investment_amount_buy
+                    total_contributions_buy += monthly_investment_amount_buy
             
             yearly_investment_value_buy.append(round(investment_value_buy, 2))
+            # Calculate gains: total value minus contributions
+            gains_buy = max(0, investment_value_buy - total_contributions_buy)
+            yearly_investment_gains_buy.append(round(gains_buy, 2))
             
             # Calculate investment with available budget for RENT SCENARIO
             investment_value_rent = self.down_payment
+            total_contributions_rent = self.down_payment
             
             for y in range(year):
                 # Income increases annually with inflation
@@ -388,13 +396,20 @@ class RentVsBuyAnalysis:
                     investment_value_rent *= (1 + monthly_return)
                     # Add monthly investment
                     investment_value_rent += monthly_investment_amount_rent
+                    total_contributions_rent += monthly_investment_amount_rent
             
             yearly_investment_value_rent.append(round(investment_value_rent, 2))
+            # Calculate gains: total value minus contributions
+            gains_rent = max(0, investment_value_rent - total_contributions_rent)
+            yearly_investment_gains_rent.append(round(gains_rent, 2))
         
         return {
             'years': list(range(1, years + 1)),
             'home_equity_after_sales': yearly_home_equity,
-            'investment_growth': yearly_investment_value_rent  # Investment growth for rent scenario
+            'investment_growth_buy': yearly_investment_value_buy,
+            'investment_growth_rent': yearly_investment_value_rent,
+            'investment_gains_buy': yearly_investment_gains_buy,
+            'investment_gains_rent': yearly_investment_gains_rent
         }
     
     def compare_scenarios(self, years, monthly_rent, annual_market_return=7.0, 

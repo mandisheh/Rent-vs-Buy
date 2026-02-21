@@ -566,9 +566,9 @@
             console.log('===== GROWTH CHART DATA DEBUG =====');
             console.log('Full growth data received:', growthData);
             console.log('Home equity length:', growthData.home_equity_after_sales ? growthData.home_equity_after_sales.length : 'N/A');
-            console.log('Investment growth length:', growthData.investment_growth ? growthData.investment_growth.length : 'N/A');
             console.log('Home equity values:', growthData.home_equity_after_sales);
-            console.log('Investment values:', growthData.investment_growth);
+            console.log('Buy gains values:', growthData.investment_gains_buy);
+            console.log('Rent gains values:', growthData.investment_gains_rent);
             console.log('=====================================');
             
             const canvasContext = ctx.getContext('2d');
@@ -592,14 +592,27 @@
                             data: growthData.home_equity_after_sales,
                             backgroundColor: '#2ecc71',
                             borderColor: '#27ae60',
-                            borderWidth: 2
+                            borderWidth: 2,
+                            type: 'bar',
+                            yAxisID: 'y'
                         },
                         {
-                            label: 'Investment Growth',
-                            data: growthData.investment_growth,
-                            backgroundColor: '#f39c12',
-                            borderColor: '#d68910',
-                            borderWidth: 2
+                            label: 'Buy Investment Gains',
+                            data: growthData.investment_gains_buy,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            borderWidth: 2,
+                            type: 'line',
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Rent Investment Gains',
+                            data: growthData.investment_gains_rent,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 2,
+                            type: 'line',
+                            yAxisID: 'y'
                         }
                     ]
                 },
