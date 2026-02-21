@@ -420,6 +420,13 @@ class RentVsBuyAnalysis:
             for i in range(len(yearly_home_equity))
         ]
         
+        # Calculate total available cash for each scenario
+        yearly_buy_total_available = [
+            round(yearly_home_equity[i] + yearly_investment_value_buy[i], 2)
+            for i in range(len(yearly_home_equity))
+        ]
+        yearly_rent_total_available = yearly_investment_value_rent
+        
         return {
             'years': list(range(1, years + 1)),
             'home_equity_after_sales': yearly_home_equity,
@@ -428,6 +435,8 @@ class RentVsBuyAnalysis:
             'investment_growth_rent': yearly_investment_value_rent,
             'investment_gains_buy': yearly_investment_gains_buy,
             'investment_gains_rent': yearly_investment_gains_rent,
+            'buy_total_available_cash': yearly_buy_total_available,
+            'rent_total_available_cash': yearly_rent_total_available,
             'buy_wealth_gains': yearly_buy_wealth_gains
         }
     
