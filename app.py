@@ -5,6 +5,7 @@ Web interface for Rent vs Buy Analysis
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from rent_vs_buy import RentVsBuyAnalysis
+from tax_calculator import TaxCalculator
 import json
 import os
 
@@ -161,6 +162,27 @@ def analyze():
                     'rent_total_available_cash': results['yearly_growth']['rent_total_available_cash']
                 }
             }
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/affordability', methods=['POST'])
+def calculate_affordability():
+    """
+    Calculate home affordability based on gross income and state
+    Returns after-tax income with tax breakdown
+    """
+    try:
+        data = request.get_json()
+        gross_annual_income = float(data.get('gross_annual_income', 0))
+        state_code = data.get('state_code', 'CA').upper()
+        
+        tax_info = TaxCalculator.calculate_after_tax_income(gross_annual_income, state_code)
+        
+        return jsonify({
+            'success': True,
+            'tax_info': tax_info,
+            'available_states': TaxCalculator.get_available_states()
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
