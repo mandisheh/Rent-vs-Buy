@@ -114,6 +114,15 @@
             document.getElementById('buyMaintenance').textContent = formatCurrency(results.buying.total_maintenance);
             document.getElementById('buyInsurance').textContent = formatCurrency(results.buying.total_insurance);
             document.getElementById('buyHOA').textContent = formatCurrency(results.buying.total_hoa);
+            
+            // Calculate total monthly cost (mortgage + monthly taxes, maintenance, insurance, HOA)
+            const monthlyPropertyTax = results.buying.total_property_tax / results.analysis_years / 12;
+            const monthlyMaintenance = results.buying.total_maintenance / results.analysis_years / 12;
+            const monthlyInsurance = results.buying.total_insurance / results.analysis_years / 12;
+            const monthlyHOA = results.buying.total_hoa / results.analysis_years / 12;
+            const totalMonthly = results.buying.monthly_mortgage + monthlyPropertyTax + monthlyMaintenance + monthlyInsurance + monthlyHOA;
+            document.getElementById('buyTotalMonthly').textContent = formatCurrency(totalMonthly);
+            
             document.getElementById('buyClosing').textContent = formatCurrency(results.buying.closing_costs);
             document.getElementById('buySelling').textContent = formatCurrency(results.buying.selling_costs);
             document.getElementById('buyTotal').textContent = formatCurrency(results.buying.total_costs);
@@ -1336,6 +1345,10 @@
                             <div class="comparison-item">
                                 <span class="comparison-label">HOA Fees:</span>
                                 <span class="comparison-value" id="buyHOA">-</span>
+                            </div>
+                            <div class="comparison-item" style="border-top: 2px solid #ddd; padding-top: 12px; margin-top: 8px; font-weight: 600;">
+                                <span class="comparison-label">Total Monthly Cost:</span>
+                                <span class="comparison-value" id="buyTotalMonthly">-</span>
                             </div>
                             <div class="comparison-item">
                                 <span class="comparison-label">Closing Costs:</span>
