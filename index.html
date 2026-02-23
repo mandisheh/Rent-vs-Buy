@@ -1171,8 +1171,8 @@
         <div class="main-content">
             <!-- Tab Navigation -->
             <div class="tab-navigation">
-                <button class="tab-button active" onclick="switchTab('analysis-tab')">Rent vs Buy Analysis</button>
-                <button class="tab-button" onclick="switchTab('affordability-tab')">Home Affordability</button>
+                <button class="tab-button active" onclick="switchTab(this, 'analysis-tab')">Rent vs Buy Analysis</button>
+                <button class="tab-button" onclick="switchTab(this, 'affordability-tab')">Home Affordability</button>
             </div>
 
             <!-- Analysis Tab -->
@@ -1479,9 +1479,12 @@
 
     <script>
         // Tab switching function
-        function switchTab(tabName) {
+        function switchTab(button, tabName) {
+            console.log('switchTab called with tabName:', tabName);
+            
             // Hide all tabs
             const tabs = document.querySelectorAll('.tab-content');
+            console.log('Found tabs:', tabs.length);
             tabs.forEach(tab => tab.classList.remove('active'));
             
             // Remove active class from all buttons
@@ -1489,10 +1492,16 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             
             // Show selected tab
-            document.getElementById(tabName).classList.add('active');
+            const tabElement = document.getElementById(tabName);
+            console.log('Tab element found:', tabElement !== null);
+            if (tabElement) {
+                tabElement.classList.add('active');
+                console.log('Added active class to tab, display:', window.getComputedStyle(tabElement).display);
+            }
             
             // Add active class to clicked button
-            event.target.classList.add('active');
+            button.classList.add('active');
+            console.log('Tab switching complete');
         }
 
         // Tax Calculator  function
@@ -1553,7 +1562,16 @@
 
         // Load states on page load
         window.addEventListener('DOMContentLoaded', async function() {
+            console.log('DOMContentLoaded event fired');
             try {
+                const stateSelect = document.getElementById('state_code');
+                console.log('State select element found:', stateSelect !== null);
+                
+                if (!stateSelect) {
+                    console.error('state_code element not found!');
+                    return;
+                }
+                
                 const response = await fetch('/api/affordability', {
                     method: 'POST',
                     headers: {
@@ -1565,10 +1583,11 @@
                     })
                 });
                 
+                console.log('API Response status:', response.status);
                 const result = await response.json();
                 const states = result.available_states;
+                console.log('States received:', states.length);
                 
-                const stateSelect = document.getElementById('state_code');
                 states.forEach(state => {
                     const option = document.createElement('option');
                     option.value = state;
@@ -1576,6 +1595,8 @@
                     if (state === 'CA') option.selected = true;
                     stateSelect.appendChild(option);
                 });
+                
+                console.log('State dropdown populated with', states.length, 'states');
             } catch (error) {
                 console.error('Error loading states:', error);
             }

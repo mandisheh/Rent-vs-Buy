@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-button:hover {
+            color: #333;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .content-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .debug-log {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #999;
+        }
+
+        .debug-log div {
+            padding: 2px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tab Switching Test</h1>
+
+    <div class="tab-navigation">
+        <button class="tab-button active" onclick="switchTab(this, 'analysis-tab')">Tab 1: Analysis</button>
+        <button class="tab-button" onclick="switchTab(this, 'affordability-tab')">Tab 2: Affordability</button>
+    </div>
+
+    <!-- Analysis Tab -->
+    <div id="analysis-tab" class="tab-content active">
+        <h2>Analysis Tab</h2>
+        <div class="content-box">
+            <p>This is Tab 1 (Analysis)</p>
+            <div class="form-group">
+                <label for="test1">Test Input 1:</label>
+                <input type="text" id="test1" placeholder="Enter something">
+            </div>
+            <div class="form-group">
+                <label for="test2">Test Input 2:</label>
+                <input type="number" id="test2" placeholder="Enter a number">
+            </div>
+            <button onclick="alert('Tab 1 button clicked')">Test Button 1</button>
+        </div>
+    </div>
+
+    <!-- Affordability Tab -->
+    <div id="affordability-tab" class="tab-content">
+        <h2>Affordability Tab</h2>
+        <div class="content-box">
+            <p>This is Tab 2 (Affordability)</p>
+            <div class="form-group">
+                <label for="gross_income">Gross Annual Income ($):</label>
+                <input type="number" id="gross_income" placeholder="100000" min="0" step="1000">
+            </div>
+            <div class="form-group">
+                <label for="state_select">Select State:</label>
+                <select id="state_select">
+                    <option value="">-- Select a state --</option>
+                    <option value="CA">California</option>
+                    <option value="TX">Texas</option>
+                    <option value="NY">New York</option>
+                    <option value="FL">Florida</option>
+                </select>
+            </div>
+            <button onclick="alert('Tab 2 button clicked')">Calculate Taxes</button>
+        </div>
+    </div>
+
+    <div class="debug-log" id="debugLog">
+        <strong>Debug Log:</strong>
+        <div id="log-content"></div>
+    </div>
+
+    <script>
+        // Simple logging function
+        function log(message) {
+            const logContent = document.getElementById('log-content');
+            const div = document.createElement('div');
+            div.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            logContent.appendChild(div);
+            logContent.lastElementChild.scrollIntoView();
+        }
+
+        // Tab switching function
+        function switchTab(button, tabName) {
+            log('switchTab called with tabName: ' + tabName);
+            
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            log('Found tabs: ' + tabs.length);
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            const tabElement = document.getElementById(tabName);
+            log('Tab element found: ' + (tabElement !== null));
+            if (tabElement) {
+                tabElement.classList.add('active');
+                const display = window.getComputedStyle(tabElement).display;
+                log('Added active class to tab, display: ' + display);
+            } else {
+                log('ERROR: Tab element not found!');
+            }
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            log('Tab switching complete');
+        }
+
+        // Log on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            log('Page loaded, DOM ready');
+            log('Number of tabs: ' + document.querySelectorAll('.tab-content').length);
+            log('Number of buttons: ' + document.querySelectorAll('.tab-button').length);
+        });
+
+        // Initial log
+        log('Script executing...');
+    </script>
+</body>
+</html>
