@@ -116,10 +116,11 @@
             document.getElementById('buyHOA').textContent = formatCurrency(results.buying.total_hoa);
             
             // Calculate total monthly cost (mortgage + monthly taxes, maintenance, insurance, HOA)
-            const monthlyPropertyTax = results.buying.total_property_tax / results.analysis_years / 12;
-            const monthlyMaintenance = results.buying.total_maintenance / results.analysis_years / 12;
-            const monthlyInsurance = results.buying.total_insurance / results.analysis_years / 12;
-            const monthlyHOA = results.buying.total_hoa / results.analysis_years / 12;
+            const analysisYears = parseInt(document.getElementById('analysis_years').value) || 10;
+            const monthlyPropertyTax = results.buying.total_property_tax / analysisYears / 12;
+            const monthlyMaintenance = results.buying.total_maintenance / analysisYears / 12;
+            const monthlyInsurance = results.buying.total_insurance / analysisYears / 12;
+            const monthlyHOA = results.buying.total_hoa / analysisYears / 12;
             const totalMonthly = results.buying.monthly_mortgage + monthlyPropertyTax + monthlyMaintenance + monthlyInsurance + monthlyHOA;
             document.getElementById('buyTotalMonthly').textContent = formatCurrency(totalMonthly);
             
