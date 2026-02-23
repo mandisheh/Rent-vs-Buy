@@ -5,7 +5,7 @@ Calculates federal and state income taxes based on gross income
 
 class TaxCalculator:
     # 2024 Federal Tax Brackets (Single Filer)
-    FEDERAL_BRACKETS_2024 = [
+    FEDERAL_BRACKETS_SINGLE_2024 = [
         (11600, 0.10),      # 10% up to $11,600
         (47150, 0.12),      # 12% up to $47,150
         (100525, 0.22),     # 22% up to $100,525
@@ -15,8 +15,20 @@ class TaxCalculator:
         (float('inf'), 0.37) # 37% above $609,350
     ]
     
+    # 2024 Federal Tax Brackets (Married Filing Jointly)
+    FEDERAL_BRACKETS_MARRIED_2024 = [
+        (23200, 0.10),      # 10% up to $23,200
+        (94300, 0.12),      # 12% up to $94,300
+        (201050, 0.22),     # 22% up to $201,050
+        (383900, 0.24),     # 24% up to $383,900
+        (487450, 0.32),     # 32% up to $487,450
+        (731200, 0.35),     # 35% up to $731,200
+        (float('inf'), 0.37) # 37% above $731,200
+    ]
+    
     # Standard deduction for 2024
-    STANDARD_DEDUCTION_2024 = 14600
+    STANDARD_DEDUCTION_SINGLE_2024 = 14600
+    STANDARD_DEDUCTION_MARRIED_2024 = 29200
     
     # State tax rates (simplified flat rates or brackets)
     STATE_TAX_RATES = {
@@ -73,16 +85,24 @@ class TaxCalculator:
     }
     
     @staticmethod
-    def calculate_federal_tax(annual_income):
+    def calculate_federal_tax(annual_income, filing_status='single'):
         """Calculate federal income tax using 2024 brackets"""
-        if annual_income <= TaxCalculator.STANDARD_DEDUCTION_2024:
+        # Select appropriate brackets and standard deduction
+        if filing_status.lower() == 'married':
+            brackets = TaxCalculator.FEDERAL_BRACKETS_MARRIED_2024
+            standard_deduction = TaxCalculator.STANDARD_DEDUCTION_MARRIED_2024
+        else:
+            brackets = TaxCalculator.FEDERAL_BRACKETS_SINGLE_2024
+            standard_deduction = TaxCalculator.STANDARD_DEDUCTION_SINGLE_2024
+        
+        if annual_income <= standard_deduction:
             return 0
         
-        taxable_income = annual_income - TaxCalculator.STANDARD_DEDUCTION_2024
+        taxable_income = annual_income - standard_deduction
         tax = 0
         previous_limit = 0
         
-        for limit, rate in TaxCalculator.FEDERAL_BRACKETS_2024:
+        for limit, rate in brackets:
             if taxable_income <= previous_limit:
                 break
             
@@ -127,14 +147,19 @@ class TaxCalculator:
         return total_fica
     
     @staticmethod
-    def calculate_after_tax_income(gross_annual_income, state_code='CA'):
+    def calculate_after_tax_income(gross_annual_income, state_code='CA', filing_status='single'):
         """
         Calculate after-tax income including federal, state, and FICA taxes
+        
+        Args:
+            gross_annual_income: Annual income before taxes
+            state_code: Two-letter state code
+            filing_status: 'single' or 'married'
         
         Returns:
             dict with breakdown of taxes and after-tax income
         """
-        federal_tax = TaxCalculator.calculate_federal_tax(gross_annual_income)
+        federal_tax = TaxCalculator.calculate_federal_tax(gross_annual_income, filing_status)
         state_tax = TaxCalculator.calculate_state_tax(gross_annual_income, state_code)
         fica_tax = TaxCalculator.calculate_fica_taxes(gross_annual_income)
         

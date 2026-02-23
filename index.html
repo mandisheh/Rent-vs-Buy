@@ -1433,6 +1433,15 @@
                                 <select id="state_code"></select>
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="filing_status">Filing Status</label>
+                                <select id="filing_status">
+                                    <option value="single">Single</option>
+                                    <option value="married">Married Filing Jointly</option>
+                                </select>
+                            </div>
+                        </div>
                         <button onclick="calculateTaxes()" class="btn-primary">Calculate After-Tax Income</button>
                     </div>
 
@@ -1519,6 +1528,7 @@
         async function calculateTaxes() {
             const grossIncome = parseFloat(document.getElementById('gross_annual_income').value);
             const stateCode = document.getElementById('state_code').value;
+            const filingStatus = document.getElementById('filing_status').value;
 
             if (!grossIncome || grossIncome <= 0) {
                 alert('Please enter a valid gross annual income');
@@ -1533,7 +1543,8 @@
                     },
                     body: JSON.stringify({
                         gross_annual_income: grossIncome,
-                        state_code: stateCode
+                        state_code: stateCode,
+                        filing_status: filingStatus
                     })
                 });
 

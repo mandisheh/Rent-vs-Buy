@@ -169,15 +169,16 @@ def analyze():
 @app.route('/api/affordability', methods=['POST'])
 def calculate_affordability():
     """
-    Calculate home affordability based on gross income and state
+    Calculate home affordability based on gross income, state, and filing status
     Returns after-tax income with tax breakdown
     """
     try:
         data = request.get_json()
         gross_annual_income = float(data.get('gross_annual_income', 0))
         state_code = data.get('state_code', 'CA').upper()
+        filing_status = data.get('filing_status', 'single').lower()
         
-        tax_info = TaxCalculator.calculate_after_tax_income(gross_annual_income, state_code)
+        tax_info = TaxCalculator.calculate_after_tax_income(gross_annual_income, state_code, filing_status)
         
         return jsonify({
             'success': True,
